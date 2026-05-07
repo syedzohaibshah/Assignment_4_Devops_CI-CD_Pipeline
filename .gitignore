@@ -26,3 +26,7 @@ yarn-debug.log*
 
 # Docker
 .dockerignore
+
+fully-docker-compose.yml
+
+README.md
