@@ -62,7 +62,7 @@ jobs:
         run: node --check server.js
 
       - name: run backend
-        run: cd backend && npm start
+        run: cd backend && npm start &
 
   deploy-on-AWS-EC2-Instance:
     needs: [test-frontend, test-backend]
