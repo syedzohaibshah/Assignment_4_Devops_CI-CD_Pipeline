@@ -119,3 +119,40 @@ jobs:
       - name: Set Deployment URL
         id: set-url
         run: echo "page_url=http://${{ vars.EC2_HOST }}" >> $GITHUB_OUTPUT
+
+      - name: Send Success Email to QA
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{secrets.SMTP_HOST}}
+          server_port: 587
+          username: ${{secrets.SMTP_USERNAME}}
+          password: ${{secrets.SMTP_PASSWORD}}
+          subject: "Deployment Successful - Ready for QA Testing"
+          to: ${{secrets.QA_EMAIL}}
+          from: "GitHub Actions"
+          body: |
+            Deployment successful!
+
+            Access: http://${{ vars.EC2_HOST }}
+            Author: ${{ github.actor }}
+            PR #: ${{ github.event.pull_request.number }}
+            Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: Send Failure Email
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{secrets.SMTP_HOST}}
+          server_port: 587
+          username: ${{secrets.SMTP_USERNAME}}
+          password: ${{secrets.SMTP_PASSWORD}}
+          subject: "Workflow Failed"
+          to: ${{secrets.QA_EMAIL}}
+          from: "GitHub Actions"
+          body: |
+            Workflow failed!
+
+            Author: ${{ github.actor }}
+            PR #: ${{ github.event.pull_request.number }}
+            Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
