@@ -22,15 +22,16 @@ jobs:
         with:
           node-version: 18
       
-      - run: cd frontend & npm install
+      - run: cd frontend && npm install
       - name: linting
         run: cd frontend & npm run lint
-      - name:run unit test
-        run:npm test --watchAll=false
+      - name: run unit test
+        run: cd frontend && npm test -- --watchAll=false
       - name: upload test
         uses: actions/upload-artifact@v4
         with:
-          name:frontend
+          name: frontend
+          path: frontend/coverage
       
      # STEP 2: Test Backend
   test-backend:
