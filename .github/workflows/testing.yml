@@ -55,14 +55,14 @@ jobs:
 
       - name: Install Dependencies
         working-directory: ./backend
-        run: npm install
+        run: cd backend && npm install
 
       - name: Check Backend Syntax
         working-directory: ./backend
-        run: node --check server.js
+        run: cd backend && node --check server.js
 
       - name: run backend
-        run: npm start
+        run: cd backend && npm start
 
   deploy-on-AWS-EC2-Instance:
     needs: [test-frontend, test-backend]
