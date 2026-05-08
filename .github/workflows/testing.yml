@@ -25,6 +25,7 @@ jobs:
       - run: cd frontend && npm install
       - name: linting
         run: cd frontend && npm run lint -- --fix
+      - name: run lint
         run: cd frontend && npm run lint
       - name: run unit test
         run: cd frontend && npm test -- --watchAll=false
