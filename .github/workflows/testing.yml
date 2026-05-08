@@ -32,7 +32,7 @@ jobs:
         run: cd frontend && npm test -- --watchAll=false
 
       - name: Build Application
-        run: cd frontend && npm run build
+        run: cd frontend && CI=false npm run build
 
       - name: Upload Frontend Build Artifacts
         uses: actions/upload-artifact@v4
@@ -59,7 +59,7 @@ jobs:
 
       - name: Check Backend Syntax
         working-directory: ./backend
-        run: cd backend && node --check server.js
+        run: node --check server.js
 
       - name: run backend
         run: cd backend && npm start

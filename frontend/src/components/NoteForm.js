@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './NoteForm.css';
 
 function NoteForm({ onSave, selectedNote, onCancel }) {
@@ -66,5 +67,19 @@ function NoteForm({ onSave, selectedNote, onCancel }) {
     </form>
   );
 }
+
+NoteForm.propTypes = {
+  onSave: PropTypes.func.isRequired,
+  selectedNote: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    content: PropTypes.string,
+  }),
+  onCancel: PropTypes.func.isRequired,
+};
+
+NoteForm.defaultProps = {
+  selectedNote: null,
+};
 
 export default NoteForm;

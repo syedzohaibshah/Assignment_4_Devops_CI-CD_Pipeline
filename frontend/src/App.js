@@ -20,11 +20,10 @@ function App() {
 
   const checkBackendHealth = async () => {
     try {
-      const response = await axios.get('/api/health');
+      await axios.get('/api/health');
       setBackendStatus('connected');
     } catch (err) {
       setBackendStatus('disconnected');
-      console.error('Backend connection error:', err);
     }
   };
 
@@ -36,7 +35,6 @@ function App() {
       setError(null);
     } catch (err) {
       setError('Failed to load notes. Make sure backend is running.');
-      console.error('Error fetching notes:', err);
     } finally {
       setLoading(false);
     }
@@ -45,7 +43,6 @@ function App() {
   const handleSaveNote = async (noteData) => {
     try {
       if (selectedNote) {
-        // Update existing note
         const response = await axios.put(
           `/api/notes/${selectedNote.id}`,
           noteData,
@@ -57,14 +54,12 @@ function App() {
         );
         setSelectedNote(null);
       } else {
-        // Create new note
         const response = await axios.post('/api/notes', noteData);
         setNotes([response.data, ...notes]);
       }
       setError(null);
     } catch (err) {
       setError('Failed to save note');
-      console.error('Error saving note:', err);
     }
   };
 
@@ -78,7 +73,6 @@ function App() {
       setError(null);
     } catch (err) {
       setError('Failed to delete note');
-      console.error('Error deleting note:', err);
     }
   };
 
