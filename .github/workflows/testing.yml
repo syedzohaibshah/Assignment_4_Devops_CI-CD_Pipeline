@@ -86,6 +86,13 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             cd ~/Assignment_4_Devops_CI-CD_Pipeline
+
+            # Stop existing services
+            pm2 stop backend 2>/dev/null || true
+            pm2 delete backend 2>/dev/null || true
+            docker-compose -f postgres-compose.yml down 2>/dev/null || true
+
+            # Pull latest code
             git pull origin main
 
             # Start PostgreSQL with docker-compose
@@ -95,7 +102,7 @@ jobs:
             # Backend setup
             cd backend
             npm install
-            pm2 restart backend || pm2 start server.js --name backend
+            pm2 start server.js --name backend
             cd ..
 
             # Frontend deployment
