@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import "./NoteForm.css";
+import React, { useState, useEffect } from 'react';
+import './NoteForm.css';
 
 function NoteForm({ onSave, selectedNote, onCancel }) {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     if (selectedNote) {
@@ -16,20 +16,20 @@ function NoteForm({ onSave, selectedNote, onCancel }) {
     e.preventDefault();
     if (title.trim() && content.trim()) {
       onSave({ title, content });
-      setTitle("");
-      setContent("");
+      setTitle('');
+      setContent('');
     }
   };
 
   const handleCancel = () => {
-    setTitle("");
-    setContent("");
+    setTitle('');
+    setContent('');
     onCancel();
   };
 
   return (
     <form onSubmit={handleSubmit} className="note-form">
-      <h2>{selectedNote ? "Edit Note" : "Create New Note"}</h2>
+      <h2>{selectedNote ? 'Edit Note' : 'Create New Note'}</h2>
 
       <input
         type="text"
@@ -51,7 +51,7 @@ function NoteForm({ onSave, selectedNote, onCancel }) {
 
       <div className="form-buttons">
         <button type="submit" className="btn btn-primary">
-          {selectedNote ? "Update" : "Create"} Note
+          {selectedNote ? 'Update' : 'Create'} Note
         </button>
         {selectedNote && (
           <button

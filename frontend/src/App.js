@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./App.css";
-import NoteList from "./components/NoteList";
-import NoteForm from "./components/NoteForm";
-import StatusBar from "./components/StatusBar";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './App.css';
+import NoteList from './components/NoteList';
+import NoteForm from './components/NoteForm';
+import StatusBar from './components/StatusBar';
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedNote, setSelectedNote] = useState(null);
-  const [backendStatus, setBackendStatus] = useState("checking");
+  const [backendStatus, setBackendStatus] = useState('checking');
 
   // Check backend health on mount
   useEffect(() => {
@@ -20,23 +20,23 @@ function App() {
 
   const checkBackendHealth = async () => {
     try {
-      const response = await axios.get("/api/health");
-      setBackendStatus("connected");
+      const response = await axios.get('/api/health');
+      setBackendStatus('connected');
     } catch (err) {
-      setBackendStatus("disconnected");
-      console.error("Backend connection error:", err);
+      setBackendStatus('disconnected');
+      console.error('Backend connection error:', err);
     }
   };
 
   const fetchNotes = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/notes");
+      const response = await axios.get('/api/notes');
       setNotes(response.data);
       setError(null);
     } catch (err) {
-      setError("Failed to load notes. Make sure backend is running.");
-      console.error("Error fetching notes:", err);
+      setError('Failed to load notes. Make sure backend is running.');
+      console.error('Error fetching notes:', err);
     } finally {
       setLoading(false);
     }
@@ -58,13 +58,13 @@ function App() {
         setSelectedNote(null);
       } else {
         // Create new note
-        const response = await axios.post("/api/notes", noteData);
+        const response = await axios.post('/api/notes', noteData);
         setNotes([response.data, ...notes]);
       }
       setError(null);
     } catch (err) {
-      setError("Failed to save note");
-      console.error("Error saving note:", err);
+      setError('Failed to save note');
+      console.error('Error saving note:', err);
     }
   };
 
@@ -77,8 +77,8 @@ function App() {
       }
       setError(null);
     } catch (err) {
-      setError("Failed to delete note");
-      console.error("Error deleting note:", err);
+      setError('Failed to delete note');
+      console.error('Error deleting note:', err);
     }
   };
 

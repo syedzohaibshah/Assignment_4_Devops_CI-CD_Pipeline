@@ -1,13 +1,13 @@
-import React from "react";
-import "./NoteList.css";
+import React from 'react';
+import './NoteList.css';
 
 function NoteList({ notes, selectedNote, onSelect, onDelete }) {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return (
       date.toLocaleDateString() +
-      " " +
-      date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      ' ' +
+      date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     );
   };
 
@@ -16,7 +16,7 @@ function NoteList({ notes, selectedNote, onSelect, onDelete }) {
       {notes.map((note) => (
         <div
           key={note.id}
-          className={`note-card ${selectedNote?.id === note.id ? "selected" : ""}`}
+          className={`note-card ${selectedNote?.id === note.id ? 'selected' : ''}`}
           onClick={() => onSelect(note)}
         >
           <div className="note-header">
@@ -25,7 +25,7 @@ function NoteList({ notes, selectedNote, onSelect, onDelete }) {
               className="delete-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                if (window.confirm("Delete this note?")) {
+                if (window.confirm('Delete this note?')) {
                   onDelete(note.id);
                 }
               }}
