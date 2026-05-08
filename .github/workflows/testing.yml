@@ -61,9 +61,6 @@ jobs:
         working-directory: ./backend
         run: node --check server.js
 
-      - name: run backend
-        run: cd backend && npm start &
-
   deploy-on-AWS-EC2-Instance:
     needs: [test-frontend, test-backend]
     runs-on: ubuntu-latest
@@ -81,27 +78,32 @@ jobs:
           name: frontend-build
           path: frontend-build/
 
-      - name: Deploy Frontend to EC2
-        uses: burnett01/rsync-deployments@6.0.0
-        with:
-          switches: -vzr --delete --omit-dir-times
-          path: frontend-build/
-          remote_path: /var/www/html/
-          remote_host: ${{vars.EC2_HOST}}
-          remote_user: ${{vars.EC2_USER}}
-          remote_key: ${{ secrets.EC2_PRIVATE_KEY }}
-
-      - name: Deploy Backend to EC2
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{vars.EC2_HOST}}
           username: ${{vars.EC2_USER}}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            cd ~/Assignment_4_Devops_CI-CD_Pipeline/backend
-            #git pull origin main      # Get latest code
-            npm install               # Install dependencies
-            pm2 restart backend       # Restart the running server
+            cd ~/Assignment_4_Devops_CI-CD_Pipeline
+            git pull origin main
+
+            # Start PostgreSQL with docker-compose
+            docker-compose -f postgres-compose.yml up -d
+            sleep 5
+
+            # Backend setup
+            cd backend
+            npm install
+            pm2 restart backend || pm2 start server.js --name backend
+            cd ..
+
+            # Frontend deployment
+            sudo chown ubuntu:ubuntu /var/www/html
+            sudo chmod 755 /var/www/html
+            rm -rf /var/www/html/*
+            cp -r frontend/build/* /var/www/html/
+            sudo systemctl restart apache2
 
       - name: Set Deployment URL
         id: set-url
