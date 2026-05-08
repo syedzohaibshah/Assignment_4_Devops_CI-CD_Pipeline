@@ -24,10 +24,11 @@ jobs:
       
       - run: cd frontend && npm install
       - name: linting
-        run: cd frontend & npm run lint
+        run: cd frontend && npm run lint -- --fix
+        run: cd frontend && npm run lint
       - name: run unit test
         run: cd frontend && npm test -- --watchAll=false
-      - name: upload test
+      - name: upload test build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: frontend
