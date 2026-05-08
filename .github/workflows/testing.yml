@@ -55,7 +55,7 @@ jobs:
 
       - name: Install Dependencies
         working-directory: ./backend
-        run: cd backend && npm install
+        run: npm install
 
       - name: Check Backend Syntax
         working-directory: ./backend
@@ -99,7 +99,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             cd ~/Assignment_4_Devops_CI-CD_Pipeline/backend
-            git pull origin main      # Get latest code
+            #git pull origin main      # Get latest code
             npm install               # Install dependencies
             pm2 restart backend       # Restart the running server
 
