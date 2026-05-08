@@ -90,14 +90,18 @@ jobs:
             # Stop existing services
             pm2 stop backend 2>/dev/null || true
             pm2 delete backend 2>/dev/null || true
-            docker-compose -f postgres-compose.yml down 2>/dev/null || true
+            docker-compose -f postgres-compose.yml down -v 2>/dev/null || true
+
+            # Force remove old postgres container if it exists
+            docker rm -f notes_postgres 2>/dev/null || true
+            docker rm -f notes_db 2>/dev/null || true
 
             # Pull latest code
             git pull origin main
 
             # Start PostgreSQL with docker-compose
             docker-compose -f postgres-compose.yml up -d
-            sleep 5
+            sleep 10
 
             # Backend setup
             cd backend
