@@ -17,10 +17,9 @@ on:
 
 jobs:
   frontend:
-    runs-on:ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
-      - name:checkout
-        uses:actions/checkout@v4
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version:24
@@ -37,8 +36,7 @@ jobs:
   backend:
     runs-on:ubuntu-latest
     steps:
-      - name: checkout
-        uses:actions/checkout@v4
+        uses: actions/checkout@v4
       - uses: actions/setup-node@v4 
         with:
           node-version:24
