@@ -91,6 +91,46 @@ jobs:
         id: set-url
         run: echo "page_url=http://${{ vars.HOST_2 }}" >> $GITHUB_OUTPUT
 
+    succes-email:
+       needs: deploy-onstaging-ec2
+       if: success()
+       runs-on: ubuntu-latest
+       
+       steps:
+         - name: send succes email
+           uses: dawidd6/action-send-mail@<REF>
+           with:
+             server_address: ${{secrets.SMTP_HOST}}
+             server_port: 587
+             username: ${{secrets.SMTP_USERNAME}}
+             password: ${{secrets.SMTP_PASSWORD}}
+             subject: "Deployment Successful - Ready for QA Testing"
+             to: ${{secrets.QA_EMAIL}}
+             from: "GitHub Actions"
+             body:|
+               Hello!
+               Build job of ${{github.repository}} completed successfully!
+
+    failure-email:
+       needs: deploy-onstaging-ec2
+       if: failure()
+       runs-on: ubuntu-latest
+       
+       steps:
+         - name: send failure email
+           uses: dawidd6/action-send-mail@<REF>
+           with:
+             server_address: ${{secrets.SMTP_HOST}}
+             server_port: 587
+             username: ${{secrets.SMTP_USERNAME}}
+             password: ${{secrets.SMTP_PASSWORD}}
+             subject: "Deployment Failed - Please Check"
+             to: ${{secrets.QA_EMAIL}}
+             from: "GitHub Actions"
+             body:|
+               Hello!
+               Build job of ${{github.repository}} failed!
+
 #in  apache configuration file, add the following lines to set up the reverse proxy for the backend API:
 #ProxyPass /api http://localhost:5000/api
 #ProxyPassReverse /api http://localhost:5000/api
