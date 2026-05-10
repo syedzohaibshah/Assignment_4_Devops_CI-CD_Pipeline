@@ -1,6 +1,6 @@
-name: staging workflow 
+name: staging workflow
 
-run-name: >+ 
+run-name: >+
   CI Pipeline triggered by ${{github.actor}}
   on event':' ${{github.event_name}}
   -> branch':' ${{github.ref_name}}
@@ -13,7 +13,6 @@ on:
       - main
 
   workflow_dispatch:
-
 
 jobs:
   frontend:
@@ -30,20 +29,19 @@ jobs:
       - run: cd frontend && npm run build
       - uses: actions/upload-artifact@v4
         with:
-          name: frontend-build 
+          name: frontend-build
           path: frontend/build/
-   
 
   backend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4 
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
       - run: cd backend  && npm install
       - run: cd backend && node --check server.js
-  
+
   deploy-onstaging-ec2:
     needs: [frontend, backend]
     runs-on: ubuntu-latest
@@ -51,7 +49,7 @@ jobs:
       name: ec2-staging
       url: ${{ steps.set-url.outputs.page_url }}
     steps:
-      - name: Execute remote SSH commands using password authentication
+      - name: Execute remote SSH commands using private key
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.HOST_2 }}
@@ -60,23 +58,20 @@ jobs:
           script: |
             cd ~/Assignment_4_Devops_CI-CD_Pipeline
             git pull origin main
-            
-            
+
+
             docker compose -f postgres-compose.yml up
-            
+
             cd frontend
             npm install
             npm run build
             cp -r /build/* /var/www/html/
-            
+
             cd ../backend
             npm start
-            
+
             systemctl reload apache2
-             
- 
-             
+
       - name: Set Deployment URL
         id: set-url
-        run: echo "page_url=http://${{ vars.EC2_HOST }}" >> $GITHUB_OUTPUT  
-             
+        run: echo "page_url=http://${{ vars.HOST_2 }}" >> $GITHUB_OUTPUT
