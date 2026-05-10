@@ -51,7 +51,7 @@ jobs:
       name: ec2-staging
       url: ${{ steps.set-url.outputs.page_url }}
     steps:
-      - name: Execute remote SSH commands using password
+      - name: Execute remote SSH commands using password authentication
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.HOST_2 }}
