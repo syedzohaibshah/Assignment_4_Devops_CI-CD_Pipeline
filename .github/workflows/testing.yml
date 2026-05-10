@@ -101,6 +101,10 @@ jobs:
             cd ..
 
             # Frontend deployment
+            cd frontend
+            npm install
+            npm run build
+            cd ..
             sudo chown ubuntu:ubuntu /var/www/html
             sudo chmod 755 /var/www/html
             rm -rf /var/www/html/*
@@ -139,7 +143,7 @@ jobs:
           username: ${{secrets.SMTP_USERNAME}}
           password: ${{secrets.SMTP_PASSWORD}}
           subject: "Workflow Failed"
-          to: ${{secrets.QA_EMAIL}}
+          to: ${{secrets.QA_EMAIL}},${{secrets.DEV_EMAIL}}
           from: "GitHub Actions"
           body: |
             Workflow failed!

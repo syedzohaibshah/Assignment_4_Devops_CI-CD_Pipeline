@@ -59,8 +59,8 @@ jobs:
             cd ~/Assignment_4_Devops_CI-CD_Pipeline
             git pull origin main
 
-            pm2 stop backend
-            pm2 delete backend
+            pm2 stop backend || true
+            pm2 delete backend || true
             sudo docker compose -f postgres-compose.yml down -v
             sudo docker rm -f notes_postgres
 
@@ -101,12 +101,19 @@ jobs:
           server_port: 587
           username: ${{secrets.SMTP_USERNAME}}
           password: ${{secrets.SMTP_PASSWORD}}
-          subject: "Deployment Successful - Ready for QA Testing"
+          subject: "Staging Deployment Successful"
           to: ${{secrets.QA_EMAIL}}
           from: "GitHub Actions"
           body: |
             Hello!
             Build job of ${{github.repository}} completed successfully!
+
+            Access the staging app here:
+            http://${{ vars.HOST_2 }}
+
+            Triggered by: ${{ github.actor }}
+            Commit: ${{ github.sha }}
+            Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
   failure-email:
     needs: deploy-onstaging-ec2
@@ -120,12 +127,16 @@ jobs:
           server_port: 587
           username: ${{secrets.SMTP_USERNAME}}
           password: ${{secrets.SMTP_PASSWORD}}
-          subject: "Deployment Failed - Please Check"
-          to: ${{secrets.QA_EMAIL}}
+          subject: "Staging Deployment Failed"
+          to: ${{secrets.QA_EMAIL}},${{secrets.DEV_EMAIL}}
           from: "GitHub Actions"
           body: |
             Hello!
             Build job of ${{github.repository}} failed!
+
+            Triggered by: ${{ github.actor }}
+            Commit: ${{ github.sha }}
+            Logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
 
 
