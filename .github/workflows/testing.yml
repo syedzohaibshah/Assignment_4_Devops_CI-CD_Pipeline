@@ -69,15 +69,6 @@ jobs:
       url: ${{ steps.set-url.outputs.page_url }}
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Download Frontend Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-build
-          path: frontend-build/
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
