@@ -67,8 +67,7 @@ jobs:
             sudo cp -r build/* /var/www/html/
 
             cd ../backend
-            pkill -f "node server.js" || true
-            npm start &
+            pm2 restart backend || pm2 start server.js --name backend
 
             sleep 10
 
