@@ -76,7 +76,7 @@ jobs:
              
  
              
-     - name: Set Deployment URL
-       id: set-url
-       run: echo "page_url=http://${{ vars.EC2_HOST }}" >> $GITHUB_OUTPUT  
+      - name: Set Deployment URL
+        id: set-url
+        run: echo "page_url=http://${{ vars.EC2_HOST }}" >> $GITHUB_OUTPUT  
              
