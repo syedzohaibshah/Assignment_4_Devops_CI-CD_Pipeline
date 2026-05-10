@@ -52,7 +52,7 @@ jobs:
       url: ${{ steps.set-url.outputs.page_url }}
     steps:
       - name: Execute remote SSH commands using password
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.HOST_2 }}
           username: ${{ vars.EC2_USERNAME }}
