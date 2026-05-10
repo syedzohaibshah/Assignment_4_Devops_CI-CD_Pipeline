@@ -59,15 +59,29 @@ jobs:
             cd ~/Assignment_4_Devops_CI-CD_Pipeline
             git pull origin main
 
+            pm2 stop backend
+            pm2 delete backend
+            sudo docker compose -f postgres-compose.yml down -v
+            sudo docker remove -f notes_postgres
+
             sudo docker compose -f postgres-compose.yml up -d
 
-            cd frontend
+            sleep 10
+
+            cd backend
+            npm install
+            pm2 restart backend || pm2 start server.js --name backend
+
+            cd ../frontend
             npm install
             npm run build
+            sudo chown -R $USER:$USER /var/www/html
+            sudo chmod -R 755 /var/www/html
+            sudo rm -f /var/www/html/*
+            npm install
+
             sudo cp -r build/* /var/www/html/
 
-            cd ../backend
-            pm2 restart backend || pm2 start server.js --name backend
 
             sleep 10
 
@@ -76,3 +90,11 @@ jobs:
       - name: Set Deployment URL
         id: set-url
         run: echo "page_url=http://${{ vars.HOST_2 }}" >> $GITHUB_OUTPUT
+
+#in  apache configuration file, add the following lines to set up the reverse proxy for the backend API:
+#ProxyPass /api http://localhost:5000/api
+#ProxyPassReverse /api http://localhost:5000/api
+
+#sudo a2enmod proxy proxy_http
+#sudo systemctl restart apache2
+#sudo apache2ctl configtest
