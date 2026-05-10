@@ -45,10 +45,10 @@ jobs:
       - run: cd backend && node --check server.js
   
   deploy-onstaging-ec2:
-    needs:[frontend, backend]
+    needs: [frontend, backend]
     runs-on: ubuntu-latest
     environment:
-      name:ec2-staging
+      name: ec2-staging
       url: ${{ steps.set-url.outputs.page_url }}
     steps:
       - name: Execute remote SSH commands using password
@@ -57,7 +57,7 @@ jobs:
           host: ${{ vars.HOST_2 }}
           username: ${{ vars.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script:|
+          script: |
             cd ~/Assignment_4_Devops_CI-CD_Pipeline
             git pull origin main
             
