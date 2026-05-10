@@ -68,7 +68,9 @@ jobs:
             cp -r /build/* /var/www/html/
 
             cd ../backend
-            npm start
+            npm start &
+            
+            sleep 10
 
             systemctl reload apache2
 
