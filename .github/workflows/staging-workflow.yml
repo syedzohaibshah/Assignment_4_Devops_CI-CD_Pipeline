@@ -59,20 +59,20 @@ jobs:
             cd ~/Assignment_4_Devops_CI-CD_Pipeline
             git pull origin main
 
-
-            docker compose -f postgres-compose.yml up
+            sudo docker compose -f postgres-compose.yml up -d
 
             cd frontend
             npm install
             npm run build
-            cp -r /build/* /var/www/html/
+            sudo cp -r build/* /var/www/html/
 
             cd ../backend
+            pkill -f "node server.js" || true
             npm start &
-            
+
             sleep 10
 
-            systemctl reload apache2
+            sudo systemctl reload apache2
 
       - name: Set Deployment URL
         id: set-url
